@@ -17,6 +17,17 @@ Route::get('/', function () {
     ]);
 })->name('blog.index');
 
+Route::get('/post/{post:slug}', function (Post $post) {
+    if (! $post->is_published) {
+        abort(404);
+    }
+
+    return Inertia::render('blog/Show', [
+        'post' => $post->load(['category', 'translation']),
+        'locale' => app()->getLocale(),
+    ]);
+})->name('blog.show');
+
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
