@@ -2,14 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;  // ← adicionar
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Post extends Model
 {
-    use HasFactory;  // ← adicionar
+    use HasFactory;
 
     protected $fillable = [
         'user_id',
@@ -42,8 +43,9 @@ class Post extends Model
         return $this->hasMany(PostTranslation::class);
     }
 
-    public function translation(): ?PostTranslation
+    public function translation(): HasOne
     {
-        return $this->translations()->where('locale', app()->getLocale())->first();
+        return $this->hasOne(PostTranslation::class)
+            ->where('locale', app()->getLocale());
     }
 }
