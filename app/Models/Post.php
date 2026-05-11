@@ -2,14 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;  // ← adicionar
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Post extends Model
 {
+    use HasFactory;  // ← adicionar
+
     protected $fillable = [
-        'user_id', 'category_id', 'slug', 'is_published', 'published_at',
+        'user_id',
+        'category_id',
+        'slug',
+        'is_published',
+        'published_at',
     ];
 
     protected function casts(): array
