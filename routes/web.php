@@ -20,7 +20,11 @@ Route::get('/', function () {
     ]);
 })->name('blog.index');
 
-Route::get('/post/{post}', function (Post $post) {
+Route::get('/post/{post:slug}', function (Post $post) {
+    if (! $post->is_published) {
+        abort(404);
+    }
+
     return Inertia::render('blog/Show', [
         'post' => $post->load(['category', 'translation']),
         'locale' => app()->getLocale(),
@@ -51,9 +55,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     // edit, create, store, update, destroy virão depois
 });
-
-// Explicit route model binding
-Route::bind('post', [PostBinding::class, 'resolve']);
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
