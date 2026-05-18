@@ -1,4 +1,5 @@
 <script setup lang="ts">
+
 interface Post {
     id: number
     slug: string
@@ -22,7 +23,7 @@ defineProps<{
         }[]
     }
     locale: string
-    currentCategory?: Category | null  // ← o "?" torna opcional
+    currentCategory?: Category | null
 }>()
 
 function formatDate(date: string): string {
@@ -37,7 +38,7 @@ function formatDate(date: string): string {
         </h1>
 
         <p v-if="currentCategory" style="color: #666; margin-bottom: 30px;">
-            <a href="/" style="color: #2563eb; text-decoration: none;">
+            <a :href="route('blog.index')" style="color: #2563eb; text-decoration: none;">
                 ← {{ locale === 'de' ? 'Alle Kategorien' : 'All categories' }}
             </a>
         </p>
@@ -49,12 +50,17 @@ function formatDate(date: string): string {
         <article v-for="post in posts.data" :key="post.id"
             style="background: #fff; border-radius: 8px; padding: 24px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.08);">
             <h2 style="font-size: 1.4rem; margin: 0 0 8px; color: #1a1a1a;">
-                <a :href="`/post/${post.slug}`" style="color: inherit; text-decoration: none;">
+                <a :href="route('blog.show', { post: post.slug })" style="color: inherit; text-decoration: none;">
                     {{ post.translation?.title }}
                 </a>
             </h2>
             <p style="font-size: 0.85rem; color: #888; margin: 0 0 12px;">
-                {{ formatDate(post.published_at) }} — {{ post.category?.name }}
+                {{ formatDate(post.published_at) }}
+                —
+                <a :href="route('blog.category', { post: post.category?.slug })"
+                    style="color: #2563eb; text-decoration: none;">
+                    {{ post.category?.name }}
+                </a>
             </p>
             <p style="color: #444; line-height: 1.6;">
                 {{ post.translation?.body?.substring(0, 200) }}...
