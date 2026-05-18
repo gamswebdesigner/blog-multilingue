@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Post;
+use App\Http\Controllers\Admin\PostController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -31,6 +32,11 @@ Route::get('/post/{post:slug}', function (Post $post) {
 Route::get('dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () {
+    Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+    // edit, create, store, update, destroy virão depois
+});
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
