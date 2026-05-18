@@ -8,12 +8,12 @@ Route::get('/', function () {
     $posts = Post::where('is_published', true)
         ->with(['category', 'translation'])
         ->orderBy('published_at', 'desc')
-        ->take(6)
-        ->get();
+        ->paginate(6);
 
     return Inertia::render('blog/Index', [
         'posts' => $posts,
         'locale' => app()->getLocale(),
+        'currentCategory' => null,
     ]);
 })->name('blog.index');
 
